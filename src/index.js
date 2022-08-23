@@ -1,39 +1,47 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { string, url, required } from 'yup';
+import watch from './view.js';
 
-const userSchema = string().url().required();
+const app = () => {
+  const initialState = {
+    name: '',
+    form: {
+      status: 'invalid',
+    },
+  };
 
-const form = document.querySelector('form');
-const feedback = document.querySelector('.feedback');
+  const elements = {
+    form: document.querySelector('form'),
+    feedback: document.querySelector('.feedback'),
+  };
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();// чтобы не отправлял запрос сразу
-  const data = new FormData(e.target);// чтобы получить доступ к введенным данным
-  const inputValue = data.get('url');// сами данные
-  userSchema.validate(inputValue)
-    .then(() => {
-      feedback.textContent = 'RSS успешно загружен';
-      feedback.classList.add('text-success');
-      feedback.classList.remove('text-danger');
-    })// положительный рнезультат и запрос
-    .catch(() => {
-      feedback.textContent = 'Ссылка должна быть валидным URL'; // вместо текста - состояние
-      feedback.classList.add('text-danger');
-      feedback.classList.remove('text-success');
-    });// обработка ошибки
-});
+  const watchedState = watch(initialState, elements);
 
-// value
+  const userSchema = string().url().required();
 
-// validate
+  elements.form.addEventListener('submit', (e) => {
+    e.preventDefault();// чтобы не отправлял запрос сразу
+    const data = new FormData(e.target);// чтобы получить доступ к введенным данным
+    const inputValue = data.get('url');// сами данные
+    userSchema.validate(inputValue)
+      .then(() => {
+        watchedState.form.status = 'valid';
+      })// положительный результат и запрос
+      .catch(() => {
+        watchedState.form.status = 'invalid';
+      });// обработка ошибки
+  });
+};
 
-// parse and assert validity
-// const enteredUrl = await userSchema.validate(await ());
+app();
 
-// После отправки данных формы,
-// приложение должно производить валидацию
-// и подсвечивать красным рамку вокруг инпута,
-// если адрес невалидный. Помимо корректности ссылки,
-// нужно валидировать дубли. Если урл уже есть в списке фидов,
-// то он не проходит валидацию. После того как поток добавлен,
-// форма принимает первоначальный вид (очищается инпут, устанавливается фокус).
+// что в каком порядке происходит?
+// сначала импортируется watch?
+// потом запускается app?
+// потом мы создаем watchedState, в котором пока ничего нет?
+// потом создаем userSchema?
+// потом эвентлистнер на сабмит?
+// потом перехватываем данные и проводим валидацию?
+// если все хорошо - добавляем initialState.form.valid.true? или watchedState?
+// тогда как рендер поймет, что пора рендерить обновленную страницу?
+// в watched state надо пробросить элементы, в которые надо встаить данные после рендеринга?
