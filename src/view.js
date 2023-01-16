@@ -9,7 +9,8 @@ const renderFeedback = (state, elements, i18n) => {
     elements.feedback.classList.remove('text-danger');
   } else {
     // console.log('--- invalid form ---');
-    elements.feedback.innerHTML = i18n('errors.notURL');
+    elements.feedback.innerHTML = i18n(`errors.${state.error}`);
+    console.log('view: ', state.error);
     elements.feedback.classList.add('text-danger');
     elements.feedback.classList.remove('text-success');
   }

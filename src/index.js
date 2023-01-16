@@ -30,9 +30,10 @@ const app = () => {
       name: '',
       userEnteredLink: [],
       form: {
-        status: 'invalid', // добавить поле с датой, когда она пришла - отрисовываем
+        status: 'invalid',
       },
       feeds: [],
+      error: '',
     };
 
     const elements = {
@@ -44,18 +45,13 @@ const app = () => {
 
     const watchedState = watch(initialState, elements, i18);
 
-    // const userSchema = yup.string().url('notURL').required('required').notOneOf();
-
-    const validateUrl = async (url, links) => {
-      // const linksArr = Array.from(links); это точно без стейта нужно делать? какой стейт менять?
-      console.log('links: ', links);
-      console.log('url: ', url);
+    const validateUrl = (url, links) => {
       const schema = yup
         .string()
-        .url('notURL') // работает коряво
-        // .required() не работает
-        .notOneOf(links);// не работает
-      return schema.validate();
+        .url('notURL')
+        .required('required')
+        .notOneOf(links, 'exists');
+      return schema.validate(url, links);
     };
 
     elements.form.addEventListener('submit', (e) => {
@@ -63,28 +59,24 @@ const app = () => {
       const data = new FormData(e.target);// чтобы получить доступ к введенным данным
       const inputValue = data.get('url');// сами данные
       const links = watchedState.userEnteredLink;
-      // links.push(inputValue);
-      // console.log(links);
+      console.log(watchedState);
 
       validateUrl(inputValue, links)
         .then(() => {
           watchedState.form = { status: 'valid' };
           watchedState.userEnteredLink.push(inputValue);
-          console.log('валидацию прошел');
-          console.log('inputValue: ', inputValue);
           axios.get(getUrlWithProxy(inputValue)).then((resp) => {
             const parsedResponce = parse(resp.data.contents);
             watchedState.feeds.push(parsedResponce);
-            console.log('запрос отправлен');
           })
             .catch((err) => {
               console.log(err);
             });
-        })// положительный результат и запрос
+        })
         .catch((err) => {
-          console.log('ошибка: ', err);
           watchedState.form = { status: 'invalid' };
-        });// обработка ошибки
+          watchedState.error = err.type;
+        });
     });
   });
 };
