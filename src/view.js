@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import onChange from 'on-change';
 
 const renderFeedback = (state, elements, i18n) => {
+  console.log('state: ', state);
   if (state.form.status === 'valid') {
     // console.log('--- valid form ---');
     elements.feedback.innerHTML = i18n('loading.success');
@@ -10,7 +11,7 @@ const renderFeedback = (state, elements, i18n) => {
   } else {
     // console.log('--- invalid form ---');
     elements.feedback.innerHTML = i18n(`errors.${state.error}`);
-    console.log('view: ', state.error);
+    console.log('state error: ', state.error);
     elements.feedback.classList.add('text-danger');
     elements.feedback.classList.remove('text-success');
   }
@@ -135,13 +136,13 @@ const renderFeeds = (state, elements, i18n) => {
 const watch = (state, elements, i18n) => {
   const watchedState = onChange(state, (path) => {
     switch (path) {
-      case 'form': {
+      case 'form.status': {
         renderFeedback(state, elements, i18n);
         break;
       }
       case 'feeds': {
         renderFeeds(state, elements, i18n);
-        break;
+        break; // + отслеживание постов
       }
       default: {
         break;

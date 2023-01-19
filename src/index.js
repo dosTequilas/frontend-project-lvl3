@@ -30,9 +30,9 @@ const app = () => {
       name: '',
       userEnteredLink: [],
       form: {
-        status: 'invalid',
+        status: 'idle', // отслеживать состояние не только формы, но и загрузки фидов (idle, valid, invalid)
       },
-      feeds: [],
+      feeds: [], // состояние загрузки фида - в процессе. Логика парсинга в процесс загрузки
       error: '',
     };
 
@@ -63,19 +63,20 @@ const app = () => {
 
       validateUrl(inputValue, links)
         .then(() => {
-          watchedState.form = { status: 'valid' };
+          watchedState.form.status = 'valid';
           watchedState.userEnteredLink.push(inputValue);
           axios.get(getUrlWithProxy(inputValue)).then((resp) => {
             const parsedResponce = parse(resp.data.contents);
             watchedState.feeds.push(parsedResponce);
-          })
-            .catch((err) => {
-              console.log(err);
-            });
+          });
+          // .catch((err) => {
+          //   console.log(err);
+          // });
         })
         .catch((err) => {
-          watchedState.form = { status: 'invalid' };
+          watchedState.form.status = 'invalid';
           watchedState.error = err.type;
+          console.log(11111, err.type);
         });
     });
   });
