@@ -3,8 +3,8 @@ export default (data) => {
   const rssDOM = parser.parseFromString(data, 'text/xml');
   const parserError = rssDOM.querySelector('parsererror');
   if (parserError) {
-    const err = new Error(parserError.textContent);
-    err.isParsingError = true;
+    const err = new Error();
+    err.name = 'isParsingError';
     throw err;
   }
   const channelTitleElem = rssDOM.querySelector('channel > title');

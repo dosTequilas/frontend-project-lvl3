@@ -1,17 +1,26 @@
 import i18n from 'i18next';
 import onChange from 'on-change';
-
+// из view слоя нельзя менять состояние модели
 const renderFeedback = (state, elements, i18n) => {
-  console.log('state: ', state);
   if (state.form.status === 'valid') {
     // console.log('--- valid form ---');
     elements.feedback.innerHTML = i18n('loading.success');
     elements.feedback.classList.add('text-success');
     elements.feedback.classList.remove('text-danger');
-  } else {
+  } else if (state.form.status === 'failed') {
     // console.log('--- invalid form ---');
-    elements.feedback.innerHTML = i18n(`errors.${state.error}`);
-    console.log('state error: ', state.error);
+    setTimeout(() => {
+      elements.feedback.innerHTML = i18n(`errors.${state.form.error}`);
+    }, 10);
+    console.log('state error: ', state.form.error);
+    elements.feedback.classList.add('text-danger');
+    elements.feedback.classList.remove('text-success');
+  }
+};
+
+const renderLoadingFeedback = (state, elements, i18n) => {
+  if (state.loadingProcess.status === 'error') {
+    elements.feedback.innerHTML = i18n(`errors.${state.loadingProcess.error}`);
     elements.feedback.classList.add('text-danger');
     elements.feedback.classList.remove('text-success');
   }
@@ -138,8 +147,29 @@ const watch = (state, elements, i18n) => {
     switch (path) {
       case 'form.status': {
         renderFeedback(state, elements, i18n);
+        if (state.form.status === 'processing') {
+          elements.button.disabled = true;
+          elements.input.disabled = true;
+        } else if (state.form.status === 'idle') { // кандидат на удаление
+          elements.button.disabled = false;
+          elements.input.disabled = false;
+        } else if (state.form.status === 'valid') {
+          elements.button.disabled = false;
+          elements.input.disabled = false;
+        } else if (state.form.status === 'failed') {
+          elements.button.disabled = false;
+          elements.input.disabled = false;
+        }
         break;
       }
+
+      case 'loadingProcess.status': {
+        renderLoadingFeedback(state, elements, i18n);
+        elements.button.disabled = false;
+        elements.input.disabled = false;
+        break;
+      }
+
       case 'feeds': {
         renderFeeds(state, elements, i18n);
         break; // + отслеживание постов
