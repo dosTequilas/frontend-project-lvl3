@@ -38,6 +38,8 @@ const app = () => {
         error: '',
       },
       feeds: [], // состояние загрузки фида - в процессе. Логика парсинга в процесс загрузки
+      latestFeeds: [],
+
     };
 
     const elements = {
@@ -113,35 +115,35 @@ const app = () => {
     // функция, которая получает состояние, загружает фиды и создает массив промисов.
     // ( массив ссылок - обойти и вернуть для каждой промис)
 
-    function renderPosts(feed) {
-      const container = document.querySelector(`[data-id="${feed.id}"] .card-body`);
-      feed.posts.forEach((post) => {
-        const postElement = document.createElement('div');
-        postElement.innerHTML = `
-          <h5 class="card-title">${post.title}</h5>
-          <p class="card-text">${post.description}</p>
-          <a href="${post.link}" class="btn btn-primary" target="_blank">Read more</a>
-        `;
-        container.appendChild(postElement);
-      });
-    }
+    // function renderPosts(feed) {
+    //   const container = document.querySelector(`[data-id="${feed.id}"] .card-body`);
+    //   feed.posts.forEach((post) => {
+    //     const postElement = document.createElement('div');
+    //     postElement.innerHTML = `
+    //       <h5 class="card-title">${post.title}</h5>
+    //       <p class="card-text">${post.description}</p>
+    //       <a href="${post.link}" class="btn btn-primary" target="_blank">Read more</a>
+    //     `;
+    //     container.appendChild(postElement);
+    //   });
+    // }
 
-    setInterval(() => {
-      feeds.forEach(async (feed) => {
-        const response = await fetch(feed.url);
-        const data = await response.text();
-        const rss = parser(data);
+    // setInterval(() => {
+    //   feeds.forEach(async (feed) => {
+    //     const response = await fetch(feed.url);
+    //     const data = await response.text();
+    //     const rss = parser(data);
 
-        rss.items.forEach((item) => {
-          const postExists = feed.posts.some((post) => post.link === item.link);
-          if (!postExists) {
-            feed.posts.push(item);
-          }
-        });
+    //     rss.items.forEach((item) => {
+    //       const postExists = feed.posts.some((post) => post.link === item.link);
+    //       if (!postExists) {
+    //         feed.posts.push(item);
+    //       }
+    //     });
 
-        renderPosts(feed);
-      });
-    }, updateInterval);
+    //     renderPosts(feed);
+    //   });
+    // }, updateInterval);
   });
 };
 
