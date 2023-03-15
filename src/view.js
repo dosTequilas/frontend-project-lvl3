@@ -27,6 +27,22 @@ const renderLoadingFeedback = (state, elements, i18n) => {
 };
 
 const renderFeeds = (state, elements, i18n) => {
+  // const feedsContainer = document.getElementById("feeds-container");
+  // feedsContainer.innerHTML = '';
+
+  // for (const key in feeds) {
+  //   const feed = feeds[key];
+  //   const feedDiv = document.createElement("div");
+  //   feedDiv.classList.add("feed");
+  //   feedDiv.innerHTML = `
+  //     <h2 class="feed-title">${feed.title}</h2>
+  //     <ul class="feed-list">
+  //       ${feed.items.map((item) => `<li>${item.title}</li>`).join("")}
+  //     </ul>
+  //   `;
+  //   feedsContainer.appendChild(feedDiv);
+  // }
+
   const cardBorder = document.createElement('div');
   cardBorder.classList.add('card');
   cardBorder.classList.add('border-0');
@@ -108,37 +124,40 @@ const renderFeeds = (state, elements, i18n) => {
   cardBorderPost.appendChild(postList);
   elements.posts.appendChild(cardBorderPost);
 
-  const [feeds] = state.feeds;
-  feeds.items.forEach((element) => {
-    const itemBlock = document.createElement('li');
-    itemBlock.classList.add('list-group-item');
-    itemBlock.classList.add('d-flex');
-    itemBlock.classList.add('justify-content-between');
-    itemBlock.classList.add('align-items-start');
-    itemBlock.classList.add('border-0');
-    itemBlock.classList.add('border-end-0');
+  const { feeds } = state;
+  feeds.forEach((feed) => {
+    feed.items.forEach((post) => {
+      // console.log(post);
+      const itemBlock = document.createElement('li');
+      itemBlock.classList.add('list-group-item');
+      itemBlock.classList.add('d-flex');
+      itemBlock.classList.add('justify-content-between');
+      itemBlock.classList.add('align-items-start');
+      itemBlock.classList.add('border-0');
+      itemBlock.classList.add('border-end-0');
 
-    const aInside = document.createElement('a');
-    aInside.href = element.link;
-    aInside.classList.add('fw-bold');
-    aInside.dataset.id = '2';
-    aInside.target = '_blank';
-    aInside.rel = 'noopener noreferrer';
-    aInside.textContent = element.title;
+      const aInside = document.createElement('a');
+      aInside.href = post.link;
+      aInside.classList.add('fw-bold');
+      aInside.dataset.id = '2';
+      aInside.target = '_blank';
+      aInside.rel = 'noopener noreferrer';
+      aInside.textContent = post.title;
 
-    const buttonListItem = document.createElement('button');
-    buttonListItem.type = 'button';
-    buttonListItem.classList.add('btn');
-    buttonListItem.classList.add('btn-outline-primary');
-    buttonListItem.classList.add('btn-sm');
-    buttonListItem.dataset.id = '2';
-    buttonListItem.setAttribute('data-bs-toggle', 'modal');
-    buttonListItem.setAttribute('data-bs-target', '#modal');
-    buttonListItem.textContent = 'Просмотр';
+      const buttonListItem = document.createElement('button');
+      buttonListItem.type = 'button';
+      buttonListItem.classList.add('btn');
+      buttonListItem.classList.add('btn-outline-primary');
+      buttonListItem.classList.add('btn-sm');
+      buttonListItem.dataset.id = '2';
+      buttonListItem.setAttribute('data-bs-toggle', 'modal');
+      buttonListItem.setAttribute('data-bs-target', '#modal');
+      buttonListItem.textContent = 'Просмотр';
 
-    itemBlock.appendChild(aInside);
-    itemBlock.appendChild(buttonListItem);
-    postList.appendChild(itemBlock);
+      itemBlock.appendChild(aInside);
+      itemBlock.appendChild(buttonListItem);
+      postList.appendChild(itemBlock);
+    });
   });
 };
 

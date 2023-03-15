@@ -37,7 +37,70 @@ const app = () => {
         status: 'idle', // idle, loading, success, error
         error: '',
       },
-      feeds: [], // состояние загрузки фида - в процессе. Логика парсинга в процесс загрузки
+      feeds: [
+        {
+          link: 'https://ru.hexlet.io/lessons.rss',
+          title: 'Новые уроки на Хекслете',
+          description: 'Практические уроки по программированию',
+          items: [
+            {
+              title: 'Язык SQL / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/sql/theory_unit',
+              description: 'Цель: Изучить синтаксис SQL',
+            },
+            {
+              title: 'Риски и опасности NULL / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/null/theory_unit',
+              description: 'Цель: Узнать рисках и техниках работы со значением NULL',
+            },
+            {
+              title: 'Объединение обработкой пропусков / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/outer-join/theory_unit',
+              description: 'Цель: Познакомиться с LEFT/RIGHT/FULL OUTER JOIN и CROSS JOIN',
+            },
+            {
+              title: 'Объединение нескольких таблиц / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/join/theory_unit',
+              description: 'Цель: Научиться объединять таблицы с помощью JOIN',
+            },
+            {
+              title: 'Сортировка результатов / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/order-by/theory_unit',
+              description: 'Цель: Понять как в SQL работает сортировка',
+            },
+            {
+              title: 'Группировка результатов / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/group-by/theory_unit',
+              description: 'Цель: Научиться грамотно группировать данные',
+            },
+            {
+              title: 'Фильтрация данных / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/where/theory_unit',
+              description: 'Цель: Узнать как работает ключевое слово WHERE',
+            },
+            {
+              title: 'Агрегация (SUM, MAX, AVG) / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/sum-max-avg/theory_unit',
+              description: 'Цель: Познакомиться с другими агрегатными функциями',
+            },
+            {
+              title: 'Агрегация (COUNT) / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/count/theory_unit',
+              description: 'Цель: Понять как работает высокоуровневая агрегация',
+            },
+            {
+              title: 'Введение / SQL в аналитике',
+              link: 'https://ru.hexlet.io/courses/sql-analytics/lessons/intro/theory_unit',
+              description: 'Цель: Познакомиться с курсом',
+            },
+            {
+              title: 'Операторы упаковки и распаковки / Python: Функции',
+              link: 'https://ru.hexlet.io/courses/python-functions/lessons/packaging-and-unpacking-operators/theory_unit',
+              description: 'Цель: Узнать, как производить упаковку и распаковку итерабельных объектов и словарей',
+            },
+          ],
+        },
+      ], // состояние загрузки фида - в процессе. Логика парсинга в процесс загрузки
       latestFeeds: [],
 
     };
@@ -50,8 +113,6 @@ const app = () => {
       feeds: document.querySelector('.feeds'),
       posts: document.querySelector('.posts'),
     };
-
-    console.log(elements.button);
 
     const watchedState = watch(initialState, elements, i18);
 
@@ -68,6 +129,7 @@ const app = () => {
       watchedState.form.status = 'processing';
       return axios.get(getUrlWithProxy(link)).then((resp) => {
         const parsedResponce = parse(resp.data.contents);
+        // console.log(parsedResponce);
         watchedState.feeds.push(parsedResponce);
         watchedState.userEnteredLink.push(link);
         watchedState.loadingProcess = 'success';
@@ -78,6 +140,7 @@ const app = () => {
           watchedState.loadingProcess.status = 'error'; // аналогично посмотреть порядок строк, чтобы отрабатывать errors.
         });
     };
+
     // модальное окно вывести
 
     elements.form.addEventListener('submit', (e) => {
@@ -86,7 +149,6 @@ const app = () => {
       const inputValue = data.get('url');// сами данные
       watchedState.form.status = 'processing';
       const links = watchedState.userEnteredLink;
-      // console.log(watchedState);
 
       validateUrl(inputValue, links)
         .then(() => makeRequest(inputValue)
@@ -144,7 +206,75 @@ const app = () => {
     //     renderPosts(feed);
     //   });
     // }, updateInterval);
+
+    // async function fetchLatestPosts(initialState.userEnteredLink) {
+    //   const feed = await parser.parseURL(initialState.userEnteredLink);
+    //   console.log('fetchlatestPosts:', feed);
+    //   return feed.items.map((item) => ({
+    //     title: item.title,
+    //     link: item.link,
+    //     description: item.contentSnippet,
+    //     date: new Date(item.isoDate),
+    //   }));
+    // }
+
+    // function updateLatestPosts(feedPosts) {
+    //   feedPosts.forEach((post) => {
+    //     const isNewPost = !latestPosts.some((latestPost) => latestPost.link === post.link);
+    //     if (isNewPost) {
+    //       latestPosts.push(post);
+    //     }
+    //   });
+    // }
+
+    // function checkForNewPosts() {
+    //   feeds.forEach(async (feedUrl) => {
+    //     const feedPosts = await fetchLatestPosts(feedUrl);
+    //     updateLatestPosts(feedPosts);
+    //   });
+    // }
+
+    // setInterval(checkForNewPosts, 5000);
+
+    // const findNewValue = (oldArr, newArr) => newArr.find((value) => !oldArr.includes(value));
+
+    const generatePromises = (state) => {
+      const promises = state.feeds.map((feed, i) => axios.get(getUrlWithProxy(feed.link))
+        .then((resp) => {
+          const parsedResponce = parse(resp.data.contents); // leetcode - структуры данных
+          console.log(parsedResponce);
+          // console.log('test finder: ', findNewValue(state.feeds, parsedResponce));
+          // findNewValue(state.feeds, parsedResponce);
+
+          // state.feeds[i].items.push[parsedResponce];//это новые данные, найти разницу и запушить.
+          // feed.post - текущие, parsedResponce - новые данные. надо сранить их.
+          // [1, 2, 3] - есть сейчас
+          // [1, 2, 3, 4] - пришло
+          // надо запушить в текущий фид то, что пришло
+        })); // посты по фиду в стейте + есть новые посты? лодаш - сравнение массивов
+
+      // где какие данные в приложении мы используем?
+
+      Promise.all(promises).then(() => {
+        setTimeout(() => {
+          generatePromises(state);
+        }, 5000);
+      });
+
+      return promises;
+    };
+
+    generatePromises(watchedState);
   });
 };
 
 app();
+
+// const promises = generatePromises(watchedState);
+// Promise.all(promises)
+//   .then(() => {
+//     // all promises have resolved
+//   })
+//   .catch((error) => {
+//     // handle the error
+//   });
