@@ -203,3 +203,5 @@ const watch = (state, elements, i18n) => {
 };
 
 export default watch;
+
+// полностью очищаем контейнер с фидом и обновляем страницу, а не добавляем к текущему. Повторить map, filter и reduce. база по массивам

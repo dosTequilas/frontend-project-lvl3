@@ -5,6 +5,7 @@ export default (data) => {
   if (parserError) {
     const err = new Error();
     err.name = 'isParsingError';
+    err.text = parserError;
     throw err;
   }
   const channelTitleElem = rssDOM.querySelector('channel > title');

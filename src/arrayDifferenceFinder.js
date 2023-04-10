@@ -1,6 +1,5 @@
-const findNewValue = (oldArr, newArr) => newArr.find((value) => !oldArr.includes(value));
-
-const oldArr = [1, 2, 3];
-const newArr = [2, 3, 4];
-
-console.log(findNewValue(oldArr, newArr)); // 4
+export default (oldArr, newArr) => {
+  const postTitle = oldArr.map((item) => item.title);
+  const result = newArr.filter((item) => !postTitle.includes(item.title));
+  return result;
+};
