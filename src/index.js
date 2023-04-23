@@ -125,11 +125,12 @@ const app = () => {
           const oldArr = feedsCopy.find((item) => item.id === feed.id).items;
           const newArr = parsedResponce.items;
           const newPosts = findNewValue(oldArr, newArr);
-          console.log('NewPosts: ', newPosts);
+          // console.log('NewPosts: ', newPosts);
           feedsCopy[i].items = [...oldArr, ...newPosts];
           if (newPosts) {
             // eslint-disable-next-line no-param-reassign
             state.feeds = [...feedsCopy];
+            console.log(state);
           }
           // const intersection = oldArr.filter((x) => newArr.includes(x));
           // console.log(intersection);
@@ -148,7 +149,6 @@ const app = () => {
 
       return promises;
     };
-
     generatePromises(watchedState);
   });
 };

@@ -57,6 +57,7 @@ const renderFeeds = (state, elements, i18n) => {
 
   cardBody.appendChild(feedName);
   cardBorder.appendChild(cardBody);
+  // elements.feeds.innerHTML = '';
   elements.feeds.appendChild(cardBorder);
 
   const title = document.createElement('h3');
