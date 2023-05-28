@@ -26,6 +26,15 @@ const renderLoadingFeedback = (state, elements, i18n) => {
   }
 };
 
+const modalPreparation = () => {
+  //gервое зазполнение данных
+  // поиск внутри функции
+  //все проходит через локаль
+  // отдельным полем в стейте ui store
+  
+};
+
+
 const renderFeeds = (state, elements, i18n) => {
   // const feedsContainer = document.getElementById("feeds-container");
   // feedsContainer.innerHTML = '';
@@ -57,7 +66,7 @@ const renderFeeds = (state, elements, i18n) => {
 
   cardBody.appendChild(feedName);
   cardBorder.appendChild(cardBody);
-  // elements.feeds.innerHTML = '';
+  elements.feeds.innerHTML = '';
   elements.feeds.appendChild(cardBorder);
 
   const title = document.createElement('h3');
@@ -69,6 +78,7 @@ const renderFeeds = (state, elements, i18n) => {
   description.classList.add('m-0');
   description.classList.add('small');
   description.classList.add('text-black-50');
+
   description.textContent = state.feeds[0].description;
 
   const listItem = document.createElement('li');
@@ -103,32 +113,13 @@ const renderFeeds = (state, elements, i18n) => {
   postList.classList.add('border-0');
   postList.classList.add('rounded-0');
 
-  const postListItem = document.createElement('li');
-  postListItem.classList.add('list-group-item');
-  postListItem.classList.add('d-flex');
-  postListItem.classList.add('justify-content-between');
-  postListItem.classList.add('align-items-start');
-  postListItem.classList.add('border-0');
-  postListItem.classList.add('border-end-0');
-
-  const aListItem = document.createElement('a');
-  aListItem.href = state.feeds[0].items[0].link;
-  aListItem.classList.add('fw-bold');
-  aListItem.dataset.id = '2';
-  aListItem.target = '_blank';
-  aListItem.rel = 'noopener noreferrer';
-  aListItem.textContent = state.feeds[0].items[0].title;
-
-  postList.appendChild(postListItem);
-  cardBodyPost.appendChild(postName);
-  cardBorderPost.appendChild(cardBodyPost);
   cardBorderPost.appendChild(postList);
+  elements.posts.textContent = '';
   elements.posts.appendChild(cardBorderPost);
 
   const { feeds } = state;
   feeds.forEach((feed) => {
     feed.items.forEach((post) => {
-      // console.log(post);
       const itemBlock = document.createElement('li');
       itemBlock.classList.add('list-group-item');
       itemBlock.classList.add('d-flex');
@@ -140,7 +131,7 @@ const renderFeeds = (state, elements, i18n) => {
       const aInside = document.createElement('a');
       aInside.href = post.link;
       aInside.classList.add('fw-bold');
-      aInside.dataset.id = '2';
+      aInside.dataset.id = post.id;
       aInside.target = '_blank';
       aInside.rel = 'noopener noreferrer';
       aInside.textContent = post.title;
@@ -150,9 +141,9 @@ const renderFeeds = (state, elements, i18n) => {
       buttonListItem.classList.add('btn');
       buttonListItem.classList.add('btn-outline-primary');
       buttonListItem.classList.add('btn-sm');
-      buttonListItem.dataset.id = '2';
-      buttonListItem.setAttribute('data-bs-toggle', 'modal');
-      buttonListItem.setAttribute('data-bs-target', '#modal');
+      buttonListItem.dataset.id = post.id;
+      buttonListItem.setAttribute('data-toggle', 'modal');
+      buttonListItem.setAttribute('data-target', '#exampleModal');
       buttonListItem.textContent = 'Просмотр';
 
       itemBlock.appendChild(aInside);
@@ -204,5 +195,3 @@ const watch = (state, elements, i18n) => {
 };
 
 export default watch;
-
-// полностью очищаем контейнер с фидом и обновляем страницу, а не добавляем к текущему. Повторить map, filter и reduce. база по массивам

@@ -52,6 +52,9 @@ const app = () => {
       feedback: document.querySelector('.feedback'),
       feeds: document.querySelector('.feeds'),
       posts: document.querySelector('.posts'),
+      // card: document.querySelector('.card'),
+      // row: document.querySelector('.row'),
+      // container: document.querySelector('.continer'),
     };
 
     const watchedState = watch(initialState, elements, i18);
@@ -70,6 +73,10 @@ const app = () => {
       return axios.get(getUrlWithProxy(link)).then((resp) => {
         const parsedResponce = parse(resp.data.contents);
         parsedResponce.id = uuidv4();
+        parsedResponce.items = parsedResponce.items.map((item) => {
+          item.id = uuidv4();
+          return item;
+        });
         parsedResponce.link = link;
         // console.log(parsedResponce);
         watchedState.feeds.push(parsedResponce);
@@ -82,11 +89,14 @@ const app = () => {
           watchedState.loadingProcess.status = 'error'; // аналогично посмотреть порядок строк, чтобы отрабатывать errors.
         });
     };
-
-    // модальное окно вывести
+    elements.posts.addEventListener('click', (e) => {
+      if (e.target?.dataset?.toggle === 'modal') {
+        console.log(e.target.dataset.id);
+      }
+    });
 
     elements.form.addEventListener('submit', (e) => {
-      e.preventDefault();// чтобы не отправлял запрос сразу
+      e.preventDefault();// чтобы не отправлял зарос сразу
       const data = new FormData(e.target);// чтобы получить доступ к введенным данным
       const inputValue = data.get('url');// сами данные
       watchedState.form.status = 'processing';
@@ -95,12 +105,12 @@ const app = () => {
       validateUrl(inputValue, links)
         .then(() => makeRequest(inputValue)
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
             throw error;
           }))
 
         .catch((err) => {
-          console.log(err.type);
+          // console.log(err.type);
           if (err.name === 'ValidationError') {
             watchedState.form.status = 'failed';
             watchedState.form.error = err.type;
@@ -117,10 +127,11 @@ const app = () => {
     // const findNewValue = (oldArr, newArr) => newArr.find((value) => !oldArr.includes(value));
 
     const generatePromises = (state) => {
-      console.log(state);
+      // console.log(state);
       const promises = state.feeds.map((feed, i) => axios.get(getUrlWithProxy(feed.link))
         .then((resp) => {
           const feedsCopy = JSON.parse(JSON.stringify(state.feeds));
+          console.log(feedsCopy);
           const parsedResponce = parse(resp.data.contents); // leetcode - структуры данных
           const oldArr = feedsCopy.find((item) => item.id === feed.id).items;
           const newArr = parsedResponce.items;
@@ -130,7 +141,7 @@ const app = () => {
           if (newPosts) {
             // eslint-disable-next-line no-param-reassign
             state.feeds = [...feedsCopy];
-            console.log(state);
+            // console.log(state);
           }
           // const intersection = oldArr.filter((x) => newArr.includes(x));
           // console.log(intersection);
