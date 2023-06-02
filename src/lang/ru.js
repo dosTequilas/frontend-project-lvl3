@@ -15,5 +15,7 @@ export default {
     feeds: 'Фиды',
     posts: 'Посты',
     preview: 'Просмотр',
+    close: 'Закрыть',
+    more: 'Читать полностью',
   },
 };

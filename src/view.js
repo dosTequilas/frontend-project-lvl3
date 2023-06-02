@@ -3,12 +3,10 @@ import onChange from 'on-change';
 // из view слоя нельзя менять состояние модели
 const renderFeedback = (state, elements, i18n) => {
   if (state.form.status === 'valid') {
-    // console.log('--- valid form ---');
     elements.feedback.innerHTML = i18n('loading.success');
     elements.feedback.classList.add('text-success');
     elements.feedback.classList.remove('text-danger');
   } else if (state.form.status === 'failed') {
-    // console.log('--- invalid form ---');
     setTimeout(() => {
       elements.feedback.innerHTML = i18n(`errors.${state.form.error}`);
     }, 10);
@@ -26,14 +24,18 @@ const renderLoadingFeedback = (state, elements, i18n) => {
   }
 };
 
-const modalPreparation = () => {
-  //gервое зазполнение данных
-  // поиск внутри функции
-  //все проходит через локаль
-  // отдельным полем в стейте ui store
-  
-};
+const modalPreparation = (state, elements, i18n) => {
+  const currentPost = state.feeds[0].items.find((post) => post.id === state.currentPostId);
+  elements.modalTitle.textContent = currentPost.title;
+  elements.modalBody.textContent = currentPost.description;
+  elements.modalClose.textContent = i18n('close');
+  elements.modalMore.textContent = i18n('more');
 
+  // первое зазполнение данных - есть
+  // поиск внутри функции - можно, а зачем, обязательно ли ее переносить куда-то отсюда?
+  // все проходит через локаль - есть
+  // отдельным полем в стейте ui store - есть
+};
 
 const renderFeeds = (state, elements, i18n) => {
   // const feedsContainer = document.getElementById("feeds-container");
@@ -185,6 +187,11 @@ const watch = (state, elements, i18n) => {
         renderFeeds(state, elements, i18n);
         break; // + отслеживание постов
       }
+      case 'currentPostId': {
+        modalPreparation(state, elements, i18n);
+        break;
+      }
+
       default: {
         break;
       }

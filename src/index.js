@@ -42,6 +42,7 @@ const app = () => {
       },
       feeds: [],
       latestFeeds: [],
+      currentPostId: '',
 
     };
 
@@ -52,9 +53,11 @@ const app = () => {
       feedback: document.querySelector('.feedback'),
       feeds: document.querySelector('.feeds'),
       posts: document.querySelector('.posts'),
-      // card: document.querySelector('.card'),
-      // row: document.querySelector('.row'),
-      // container: document.querySelector('.continer'),
+      modalTitle: document.querySelector('.modal-title'),
+      modalBody: document.querySelector('.modal-body'),
+      modalClose: document.querySelector('.modal-close'),
+      modalMore: document.querySelector('.more-link'),
+
     };
 
     const watchedState = watch(initialState, elements, i18);
@@ -75,6 +78,7 @@ const app = () => {
         parsedResponce.id = uuidv4();
         parsedResponce.items = parsedResponce.items.map((item) => {
           item.id = uuidv4();
+          // console.log('id log from index.js:', item.id);
           return item;
         });
         parsedResponce.link = link;
@@ -89,10 +93,16 @@ const app = () => {
           watchedState.loadingProcess.status = 'error'; // аналогично посмотреть порядок строк, чтобы отрабатывать errors.
         });
     };
+
     elements.posts.addEventListener('click', (e) => {
       if (e.target?.dataset?.toggle === 'modal') {
-        console.log(e.target.dataset.id);
+        watchedState.currentPostId = e.target.dataset.id;
       }
+    });
+
+    elements.modalMore.addEventListener('click', (e) => {
+      // window.location.href = watchedState.currentPost.link;
+      console.log(e.target.dataset.link);
     });
 
     elements.form.addEventListener('submit', (e) => {
@@ -131,7 +141,7 @@ const app = () => {
       const promises = state.feeds.map((feed, i) => axios.get(getUrlWithProxy(feed.link))
         .then((resp) => {
           const feedsCopy = JSON.parse(JSON.stringify(state.feeds));
-          console.log(feedsCopy);
+          // console.log(feedsCopy);
           const parsedResponce = parse(resp.data.contents); // leetcode - структуры данных
           const oldArr = feedsCopy.find((item) => item.id === feed.id).items;
           const newArr = parsedResponce.items;

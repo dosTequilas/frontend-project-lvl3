@@ -14,5 +14,7 @@ export default {
     feeds: 'Feeds',
     posts: 'Posts',
     preview: 'Preview',
+    close: 'Close',
+    more: 'Read', // в английской версии правильннее так или read more?
   },
 };
