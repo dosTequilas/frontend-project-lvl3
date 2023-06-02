@@ -26,34 +26,22 @@ const renderLoadingFeedback = (state, elements, i18n) => {
 
 const modalPreparation = (state, elements, i18n) => {
   const currentPost = state.feeds[0].items.find((post) => post.id === state.currentPostId);
+  // modalTitle: document.querySelector('.modal-title'),
+  // modalBody: document.querySelector('.modal-body'),
+  // modalClose: document.querySelector('.modal-close'),
+  // modalMore: document.querySelector('.more-link'),
   elements.modalTitle.textContent = currentPost.title;
   elements.modalBody.textContent = currentPost.description;
   elements.modalClose.textContent = i18n('close');
   elements.modalMore.textContent = i18n('more');
 
-  // первое зазполнение данных - есть
+  // первое заполнение данных - есть
   // поиск внутри функции - можно, а зачем, обязательно ли ее переносить куда-то отсюда?
   // все проходит через локаль - есть
   // отдельным полем в стейте ui store - есть
 };
 
 const renderFeeds = (state, elements, i18n) => {
-  // const feedsContainer = document.getElementById("feeds-container");
-  // feedsContainer.innerHTML = '';
-
-  // for (const key in feeds) {
-  //   const feed = feeds[key];
-  //   const feedDiv = document.createElement("div");
-  //   feedDiv.classList.add("feed");
-  //   feedDiv.innerHTML = `
-  //     <h2 class="feed-title">${feed.title}</h2>
-  //     <ul class="feed-list">
-  //       ${feed.items.map((item) => `<li>${item.title}</li>`).join("")}
-  //     </ul>
-  //   `;
-  //   feedsContainer.appendChild(feedDiv);
-  // }
-
   const cardBorder = document.createElement('div');
   cardBorder.classList.add('card');
   cardBorder.classList.add('border-0');
@@ -145,7 +133,7 @@ const renderFeeds = (state, elements, i18n) => {
       buttonListItem.classList.add('btn-sm');
       buttonListItem.dataset.id = post.id;
       buttonListItem.setAttribute('data-toggle', 'modal');
-      buttonListItem.setAttribute('data-target', '#exampleModal');
+      buttonListItem.setAttribute('data-target', '#exampleModal'); // может имеет смысл убрать этот example и сделать просто modal?
       buttonListItem.textContent = 'Просмотр';
 
       itemBlock.appendChild(aInside);

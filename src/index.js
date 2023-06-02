@@ -102,7 +102,7 @@ const app = () => {
 
     elements.modalMore.addEventListener('click', (e) => {
       // window.location.href = watchedState.currentPost.link;
-      console.log(e.target.dataset.link);
+      console.log(e.target.dataset);
     });
 
     elements.form.addEventListener('submit', (e) => {
