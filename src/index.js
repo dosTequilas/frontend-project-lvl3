@@ -101,8 +101,10 @@ const app = () => {
     });
 
     elements.modalMore.addEventListener('click', (e) => {
-      // window.location.href = watchedState.currentPost.link;
-      console.log(e.target.dataset);
+      const cP = watchedState.feeds[0].items.find((post) => post.id === watchedState.currentPostId);
+      const linkElement = elements.modalMore;
+      const currentPostLink = cP.link;
+      linkElement.href = currentPostLink;
     });
 
     elements.form.addEventListener('submit', (e) => {
