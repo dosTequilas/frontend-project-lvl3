@@ -43,7 +43,7 @@ const app = () => {
       feeds: [],
       latestFeeds: [],
       currentPostId: '',
-
+      openedPost: new Set(),
     };
 
     const elements = {
@@ -57,7 +57,7 @@ const app = () => {
       modalBody: document.querySelector('.modal-body'),
       modalClose: document.querySelector('.modal-close'),
       modalMore: document.querySelector('.more-link'),
-
+      postLink: document.getElementsByTagName('a'),
     };
 
     const watchedState = watch(initialState, elements, i18);
@@ -76,13 +76,11 @@ const app = () => {
       return axios.get(getUrlWithProxy(link)).then((resp) => {
         const parsedResponce = parse(resp.data.contents);
         parsedResponce.id = uuidv4();
-        parsedResponce.items = parsedResponce.items.map((item) => {
+        parsedResponce.posts = parsedResponce.posts.map((item) => {
           item.id = uuidv4();
-          // console.log('id log from index.js:', item.id);
           return item;
         });
         parsedResponce.link = link;
-        // console.log(parsedResponce);
         watchedState.feeds.push(parsedResponce);
         watchedState.userEnteredLink.push(link);
         watchedState.loadingProcess = 'success';
@@ -94,17 +92,18 @@ const app = () => {
         });
     };
 
-    elements.posts.addEventListener('click', (e) => {
+    elements.posts.addEventListener('click', (e) => { // один обработчик на все посты?
       if (e.target?.dataset?.toggle === 'modal') {
         watchedState.currentPostId = e.target.dataset.id;
+        watchedState.openedPost.add(e.target.dataset.id);
       }
     });
 
-    elements.modalMore.addEventListener('click', (e) => {
-      const cP = watchedState.feeds[0].items.find((post) => post.id === watchedState.currentPostId);
-      const linkElement = elements.modalMore;
-      const currentPostLink = cP.link;
-      linkElement.href = currentPostLink;
+    elements.posts.addEventListener('click', (e) => { // один обработчик на все посты?
+      if (e.target.tagName === 'a') {
+        watchedState.currentPostId = e.target.dataset.id;
+        watchedState.openedPost.add(e.target.dataset.id);
+      }
     });
 
     elements.form.addEventListener('submit', (e) => {
@@ -117,12 +116,10 @@ const app = () => {
       validateUrl(inputValue, links)
         .then(() => makeRequest(inputValue)
           .catch((error) => {
-            // console.log(error);
             throw error;
           }))
 
         .catch((err) => {
-          // console.log(err.type);
           if (err.name === 'ValidationError') {
             watchedState.form.status = 'failed';
             watchedState.form.error = err.type;
@@ -136,33 +133,20 @@ const app = () => {
         });
     });
 
-    // const findNewValue = (oldArr, newArr) => newArr.find((value) => !oldArr.includes(value));
-
     const generatePromises = (state) => {
-      // console.log(state);
       const promises = state.feeds.map((feed, i) => axios.get(getUrlWithProxy(feed.link))
         .then((resp) => {
           const feedsCopy = JSON.parse(JSON.stringify(state.feeds));
-          // console.log(feedsCopy);
           const parsedResponce = parse(resp.data.contents); // leetcode - структуры данных
-          const oldArr = feedsCopy.find((item) => item.id === feed.id).items;
-          const newArr = parsedResponce.items;
+          const oldArr = feedsCopy.find((item) => item.id === feed.id).posts;
+          const newArr = parsedResponce.posts;
           const newPosts = findNewValue(oldArr, newArr);
-          // console.log('NewPosts: ', newPosts);
-          feedsCopy[i].items = [...oldArr, ...newPosts];
+          feedsCopy[i].posts = [...oldArr, ...newPosts];
           if (newPosts) {
             // eslint-disable-next-line no-param-reassign
             state.feeds = [...feedsCopy];
-            // console.log(state);
           }
-          // const intersection = oldArr.filter((x) => newArr.includes(x));
-          // console.log(intersection);
-          // state.feeds[i].items.push[parsedResponce];//это новые данные, найти разницу и запушить.
-          // feed.post - текущие, parsedResponce - новые данные. надо сранить их.
-          // [1, 2, 3] - есть сейчас
-          // [1, 2, 3, 4] - пришло
-          // надо запушить в текущий фид то, что пришло
-        }) // посты по фиду в стейте + есть новые посты? лодаш - сравнение массивов
+        })
         .catch((error) => console.log(error)));
       Promise.all(promises).then(() => {
         setTimeout(() => {

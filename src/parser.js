@@ -11,7 +11,7 @@ export default (data) => {
   const channelTitleElem = rssDOM.querySelector('channel > title');
   const channelDescriptionElem = rssDOM.querySelector('channel > description');
   const itemElements = rssDOM.querySelectorAll('item');
-  const items = Array.from(itemElements).map((elem) => {
+  const posts = Array.from(itemElements).map((elem) => {
     const titleElement = elem.querySelector('title');
     const linkElement = elem.querySelector('link');
     const descriptionElement = elem.querySelector('description');
@@ -24,6 +24,6 @@ export default (data) => {
   return {
     title: channelTitleElem.textContent,
     description: channelDescriptionElem.textContent,
-    items,
+    posts,
   };
 };

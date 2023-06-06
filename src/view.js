@@ -25,20 +25,14 @@ const renderLoadingFeedback = (state, elements, i18n) => {
 };
 
 const modalPreparation = (state, elements, i18n) => {
-  const currentPost = state.feeds[0].items.find((post) => post.id === state.currentPostId);
-  // modalTitle: document.querySelector('.modal-title'),
-  // modalBody: document.querySelector('.modal-body'),
-  // modalClose: document.querySelector('.modal-close'),
-  // modalMore: document.querySelector('.more-link'),
+  const posts = state.feeds.reduce((acc, curr) => [...acc, ...curr.posts], []);
+  const currentPost = posts.find((post) => post.id === state.currentPostId);
+
   elements.modalTitle.textContent = currentPost.title;
   elements.modalBody.textContent = currentPost.description;
   elements.modalClose.textContent = i18n('close');
   elements.modalMore.textContent = i18n('more');
-
-  // V | первое заполнение данных
-  // ? | поиск внутри функции - можно, а зачем, обязательно ли ее переносить куда-то отсюда?
-  // V | все проходит через локаль
-  // V | отдельным полем в стейте ui store
+  elements.modalMore.href = currentPost.link;
 };
 
 const renderFeeds = (state, elements, i18n) => {
@@ -62,14 +56,14 @@ const renderFeeds = (state, elements, i18n) => {
   const title = document.createElement('h3');
   title.classList.add('h6');
   title.classList.add('m-0');
-  title.textContent = state.feeds[0].title;
+  title.textContent = state.feeds[0].title; // тоже reduce?
 
   const description = document.createElement('p');
   description.classList.add('m-0');
   description.classList.add('small');
   description.classList.add('text-black-50');
 
-  description.textContent = state.feeds[0].description;
+  description.textContent = state.feeds[0].description; // тоже reduce?
 
   const listItem = document.createElement('li');
   listItem.classList.add('list-group-item');
@@ -109,7 +103,7 @@ const renderFeeds = (state, elements, i18n) => {
 
   const { feeds } = state;
   feeds.forEach((feed) => {
-    feed.items.forEach((post) => {
+    feed.posts.forEach((post) => {
       const itemBlock = document.createElement('li');
       itemBlock.classList.add('list-group-item');
       itemBlock.classList.add('d-flex');
@@ -118,13 +112,14 @@ const renderFeeds = (state, elements, i18n) => {
       itemBlock.classList.add('border-0');
       itemBlock.classList.add('border-end-0');
 
-      const aInside = document.createElement('a');
-      aInside.href = post.link;
-      aInside.classList.add('fw-bold');
-      aInside.dataset.id = post.id;
-      aInside.target = '_blank';
-      aInside.rel = 'noopener noreferrer';
-      aInside.textContent = post.title;
+      const postLink = document.createElement('a');
+      postLink.href = post.link;
+      postLink.classList.add(state.openedPost.has(post.id) ? ('fw-normal', 'link-secondary') : 'fw-bold');
+
+      postLink.dataset.id = post.id;
+      postLink.target = '_blank';
+      postLink.rel = 'noopener noreferrer';
+      postLink.textContent = post.title;
 
       const buttonListItem = document.createElement('button');
       buttonListItem.type = 'button';
@@ -136,7 +131,7 @@ const renderFeeds = (state, elements, i18n) => {
       buttonListItem.setAttribute('data-target', '#exampleModal'); // может имеет смысл убрать этот example и сделать просто modal?
       buttonListItem.textContent = 'Просмотр';
 
-      itemBlock.appendChild(aInside);
+      itemBlock.appendChild(postLink);
       itemBlock.appendChild(buttonListItem);
       postList.appendChild(itemBlock);
     });
@@ -173,10 +168,16 @@ const watch = (state, elements, i18n) => {
 
       case 'feeds': {
         renderFeeds(state, elements, i18n);
-        break; // + отслеживание постов
+        break;
       }
+
       case 'currentPostId': {
         modalPreparation(state, elements, i18n);
+        break;
+      }
+
+      case 'openedPost': {
+        renderFeeds(state, elements, i18n);
         break;
       }
 
