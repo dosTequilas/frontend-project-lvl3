@@ -76,10 +76,10 @@ const app = () => {
       return axios.get(getUrlWithProxy(link)).then((resp) => {
         const parsedResponce = parse(resp.data.contents);
         parsedResponce.id = uuidv4();
-        parsedResponce.posts = parsedResponce.posts.map((item) => {
-          item.id = uuidv4();
-          return item;
-        });
+        parsedResponce.posts = parsedResponce.posts.map((item) => ({
+          ...item,
+          id: uuidv4(),
+        }));
         parsedResponce.link = link;
         watchedState.feeds.push(parsedResponce);
         watchedState.userEnteredLink.push(link);
@@ -87,8 +87,8 @@ const app = () => {
         watchedState.form.status = 'valid';
       })
         .catch(() => {
-          watchedState.loadingProcess.error = 'network'; // убрать зависимость от порядка строк, мб на появление ошибки, а не стейт
-          watchedState.loadingProcess.status = 'error'; // аналогично посмотреть порядок строк, чтобы отрабатывать errors.
+          watchedState.loadingProcess.error = 'network';
+          watchedState.loadingProcess.status = 'error';
         });
     };
 
