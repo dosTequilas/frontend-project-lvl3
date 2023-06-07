@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import _ from 'lodash';
-import i18next, { init } from 'i18next';
+// import _ from 'lodash';
+import i18next from 'i18next';
 import * as yup from 'yup';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -93,21 +93,18 @@ const app = () => {
     };
 
     elements.posts.addEventListener('click', (e) => { // один обработчик на все посты?
+      console.log(e);
       if (e.target?.dataset?.toggle === 'modal') {
         watchedState.currentPostId = e.target.dataset.id;
         watchedState.openedPost.add(e.target.dataset.id);
       }
-    });
-
-    elements.posts.addEventListener('click', (e) => { // один обработчик на все посты?
-      if (e.target.tagName === 'a') {
-        watchedState.currentPostId = e.target.dataset.id;
+      if (e.target.tagName === 'A') {
         watchedState.openedPost.add(e.target.dataset.id);
       }
     });
 
     elements.form.addEventListener('submit', (e) => {
-      e.preventDefault();// чтобы не отправлял зарос сразу
+      e.preventDefault();// чтобы не отправлял запрос сразу
       const data = new FormData(e.target);// чтобы получить доступ к введенным данным
       const inputValue = data.get('url');// сами данные
       watchedState.form.status = 'processing';
