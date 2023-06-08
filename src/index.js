@@ -93,7 +93,6 @@ const app = () => {
     };
 
     elements.posts.addEventListener('click', (e) => { // один обработчик на все посты?
-      console.log(e);
       if (e.target?.dataset?.toggle === 'modal') {
         watchedState.currentPostId = e.target.dataset.id;
         watchedState.openedPost.add(e.target.dataset.id);

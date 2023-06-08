@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+// import i18n from 'i18next';
 import onChange from 'on-change';
 // из view слоя нельзя менять состояние модели
 const renderFeedback = (state, elements, i18n) => {
