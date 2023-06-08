@@ -3,12 +3,14 @@ import onChange from 'on-change';
 // из view слоя нельзя менять состояние модели
 const renderFeedback = (state, elements, i18n) => {
   if (state.form.status === 'valid') {
-    elements.feedback.innerHTML = i18n('loading.success');
+    const updatedElements = { ...elements };
+    updatedElements.feedback.innerHTML = i18n('loading.success');
     elements.feedback.classList.add('text-success');
     elements.feedback.classList.remove('text-danger');
   } else if (state.form.status === 'failed') {
     setTimeout(() => {
-      elements.feedback.innerHTML = i18n(`errors.${state.form.error}`);
+      const updatedElements = { ...elements };
+      updatedElements.feedback.innerHTML = i18n(`errors.${state.form.error}`);
     }, 10);
     console.log('state error: ', state.form.error);
     elements.feedback.classList.add('text-danger');
@@ -18,21 +20,28 @@ const renderFeedback = (state, elements, i18n) => {
 
 const renderLoadingFeedback = (state, elements, i18n) => {
   if (state.loadingProcess.status === 'error') {
-    elements.feedback.innerHTML = i18n(`errors.${state.loadingProcess.error}`);
-    elements.feedback.classList.add('text-danger');
-    elements.feedback.classList.remove('text-success');
+    const { feedback } = elements;
+    feedback.innerHTML = i18n(`errors.${state.loadingProcess.error}`);
+    feedback.classList.add('text-danger');
+    feedback.classList.remove('text-success');
   }
 };
 
 const modalPreparation = (state, elements, i18n) => {
+  const {
+    modalTitle,
+    modalBody,
+    modalClose,
+    modalMore,
+  } = elements;
   const posts = state.feeds.reduce((acc, curr) => [...acc, ...curr.posts], []);
   const currentPost = posts.find((post) => post.id === state.currentPostId);
 
-  elements.modalTitle.textContent = currentPost.title;
-  elements.modalBody.textContent = currentPost.description;
-  elements.modalClose.textContent = i18n('close');
-  elements.modalMore.textContent = i18n('more');
-  elements.modalMore.href = currentPost.link;
+  modalTitle.textContent = currentPost.title;
+  modalBody.textContent = currentPost.description;
+  modalClose.textContent = i18n('close');
+  modalMore.textContent = i18n('more');
+  modalMore.href = currentPost.link;
 };
 
 const renderFeeds = (state, elements, i18n) => {
@@ -50,7 +59,8 @@ const renderFeeds = (state, elements, i18n) => {
 
   cardBody.appendChild(feedName);
   cardBorder.appendChild(cardBody);
-  elements.feeds.innerHTML = '';
+  const { feeds: feedsElement } = elements;
+  feedsElement.innerHTML = '';
   elements.feeds.appendChild(cardBorder);
 
   const title = document.createElement('h3');
@@ -98,7 +108,9 @@ const renderFeeds = (state, elements, i18n) => {
   postList.classList.add('rounded-0');
 
   cardBorderPost.appendChild(postList);
-  elements.posts.textContent = '';
+  const { posts } = elements;
+  const postsElement = posts;
+  postsElement.textContent = '';
   elements.posts.appendChild(cardBorderPost);
 
   const { feeds } = state;
@@ -138,30 +150,32 @@ const renderFeeds = (state, elements, i18n) => {
 };
 
 const watch = (state, elements, i18n) => {
+  const { button, input } = elements;
+
   const watchedState = onChange(state, (path) => {
     switch (path) {
       case 'form.status': {
         renderFeedback(state, elements, i18n);
         if (state.form.status === 'processing') {
-          elements.button.disabled = true;
-          elements.input.disabled = true;
+          button.disabled = true;
+          input.disabled = true;
         } else if (state.form.status === 'idle') { // кандидат на удаление
-          elements.button.disabled = false;
-          elements.input.disabled = false;
+          button.disabled = false;
+          input.disabled = false;
         } else if (state.form.status === 'valid') {
-          elements.button.disabled = false;
-          elements.input.disabled = false;
+          button.disabled = false;
+          input.disabled = false;
         } else if (state.form.status === 'failed') {
-          elements.button.disabled = false;
-          elements.input.disabled = false;
+          button.disabled = false;
+          input.disabled = false;
         }
         break;
       }
 
       case 'loadingProcess.status': {
         renderLoadingFeedback(state, elements, i18n);
-        elements.button.disabled = false;
-        elements.input.disabled = false;
+        button.disabled = false;
+        input.disabled = false;
         break;
       }
 
