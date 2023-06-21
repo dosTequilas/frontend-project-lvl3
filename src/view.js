@@ -1,30 +1,23 @@
-// import i18n from 'i18next';
 import onChange from 'on-change';
-// из view слоя нельзя менять состояние модели
+
 const renderFeedback = (state, elements, i18n) => {
   if (state.form.status === 'valid') {
-    const updatedElements = { ...elements };
-    updatedElements.feedback.innerHTML = i18n('loading.success');
+    elements.feedback.innerHTML = i18n('loading.success');
     elements.feedback.classList.add('text-success');
     elements.feedback.classList.remove('text-danger');
   } else if (state.form.status === 'failed') {
-    setTimeout(() => {
-      const updatedElements = { ...elements };
-      updatedElements.feedback.innerHTML = i18n(`errors.${state.form.error}`);
-    }, 10);
-    console.log('state error: ', state.form.error);
+    elements.feedback.innerHTML = i18n(`errors.${state.form.error}`);
     elements.feedback.classList.add('text-danger');
     elements.feedback.classList.remove('text-success');
   }
 };
 
 const renderLoadingFeedback = (state, elements, i18n) => {
-  if (state.loadingProcess.status === 'error') {
-    const { feedback } = elements;
-    feedback.innerHTML = i18n(`errors.${state.loadingProcess.error}`);
-    feedback.classList.add('text-danger');
-    feedback.classList.remove('text-success');
-  }
+  const { feedback } = elements;
+  console.log(elements);
+  feedback.innerHTML = i18n(`errors.${state.loadingProcess.error}`);
+  feedback.classList.add('text-danger');
+  feedback.classList.remove('text-success');
 };
 
 const modalPreparation = (state, elements, i18n) => {
@@ -66,14 +59,14 @@ const renderFeeds = (state, elements, i18n) => {
   const title = document.createElement('h3');
   title.classList.add('h6');
   title.classList.add('m-0');
-  title.textContent = state.feeds[0].title; // тоже reduce?
+  title.textContent = state.feeds[0].title;
 
   const description = document.createElement('p');
   description.classList.add('m-0');
   description.classList.add('small');
   description.classList.add('text-black-50');
 
-  description.textContent = state.feeds[0].description; // тоже reduce?
+  description.textContent = state.feeds[0].description;
 
   const listItem = document.createElement('li');
   listItem.classList.add('list-group-item');
@@ -126,7 +119,7 @@ const renderFeeds = (state, elements, i18n) => {
 
       const postLink = document.createElement('a');
       postLink.href = post.link;
-      postLink.classList.add(state.openedPost.has(post.id) ? ('fw-normal', 'link-secondary') : 'fw-bold');
+      postLink.classList.add(state.openedPost.has(post.id) ? 'fw-normal link-secondary' : 'fw-bold');
       postLink.dataset.id = post.id;
       postLink.target = '_blank';
       postLink.rel = 'noopener noreferrer';
@@ -139,7 +132,7 @@ const renderFeeds = (state, elements, i18n) => {
       buttonListItem.classList.add('btn-sm');
       buttonListItem.dataset.id = post.id;
       buttonListItem.setAttribute('data-toggle', 'modal');
-      buttonListItem.setAttribute('data-target', '#exampleModal'); // может имеет смысл убрать этот example и сделать просто modal?
+      buttonListItem.setAttribute('data-target', '#exampleModal');
       buttonListItem.textContent = 'Просмотр';
 
       itemBlock.appendChild(postLink);
@@ -159,13 +152,7 @@ const watch = (state, elements, i18n) => {
         if (state.form.status === 'processing') {
           button.disabled = true;
           input.disabled = true;
-        } else if (state.form.status === 'idle') { // кандидат на удаление
-          button.disabled = false;
-          input.disabled = false;
-        } else if (state.form.status === 'valid') {
-          button.disabled = false;
-          input.disabled = false;
-        } else if (state.form.status === 'failed') {
+        } else {
           button.disabled = false;
           input.disabled = false;
         }

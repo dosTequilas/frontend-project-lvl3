@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import _ from 'lodash';
 import i18next from 'i18next';
 import * as yup from 'yup';
 import axios from 'axios';
@@ -33,11 +32,11 @@ const app = () => {
       name: '',
       userEnteredLink: [],
       form: {
-        status: 'idle', // idle, processing, vaild, failed
+        status: 'idle',
         error: '',
       },
       loadingProcess: {
-        status: 'idle', // idle, loading, success, error
+        status: 'idle',
         error: '',
       },
       feeds: [],
@@ -92,7 +91,7 @@ const app = () => {
         });
     };
 
-    elements.posts.addEventListener('click', (e) => { // один обработчик на все посты?
+    elements.posts.addEventListener('click', (e) => {
       if (e.target?.dataset?.toggle === 'modal') {
         watchedState.currentPostId = e.target.dataset.id;
         watchedState.openedPost.add(e.target.dataset.id);
@@ -103,9 +102,9 @@ const app = () => {
     });
 
     elements.form.addEventListener('submit', (e) => {
-      e.preventDefault();// чтобы не отправлял запрос сразу
-      const data = new FormData(e.target);// чтобы получить доступ к введенным данным
-      const inputValue = data.get('url');// сами данные
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const inputValue = data.get('url');
       watchedState.form.status = 'processing';
       const links = watchedState.userEnteredLink;
 
@@ -133,7 +132,7 @@ const app = () => {
       const promises = state.feeds.map((feed, i) => axios.get(getUrlWithProxy(feed.link))
         .then((resp) => {
           const feedsCopy = JSON.parse(JSON.stringify(state.feeds));
-          const parsedResponce = parse(resp.data.contents); // leetcode - структуры данных
+          const parsedResponce = parse(resp.data.contents);
           const oldArr = feedsCopy.find((item) => item.id === feed.id).posts;
           const newArr = parsedResponce.posts;
           const newPosts = findNewValue(oldArr, newArr);
