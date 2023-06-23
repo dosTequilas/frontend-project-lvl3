@@ -122,7 +122,7 @@ const renderFeeds = (state, elements, i18n) => {
 
       const postLink = document.createElement('a');
       postLink.href = post.link;
-      postLink.classList.add(state.openedPost.has(post.id) ? 'fw-normal link-secondary' : 'fw-bold');
+      postLink.classList.add(state.openedPost.has(post.id) ? ('fw-normal', 'link-secondary') : 'fw-bold');
       postLink.dataset.id = post.id;
       postLink.target = '_blank';
       postLink.rel = 'noopener noreferrer';
