@@ -82,7 +82,7 @@ const app = () => {
         parsedResponce.link = link;
         watchedState.feeds.push(parsedResponce);
         watchedState.userEnteredLink.push(link);
-        watchedState.loadingProcess = 'success';
+        watchedState.loadingProcess.status = 'success';
         watchedState.form.status = 'valid';
       });
     };

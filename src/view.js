@@ -13,6 +13,9 @@ const renderFeedback = (state, elements, i18n) => {
 };
 
 const renderLoadingFeedback = (state, elements, i18n) => {
+  if (state.loadingProcess.status === 'success') {
+    elements.input.value = '';
+  }
   const { feedback } = elements;
   console.log(elements);
   feedback.innerHTML = i18n(`errors.${state.loadingProcess.error}`);
