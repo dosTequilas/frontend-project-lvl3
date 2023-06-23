@@ -10,7 +10,7 @@ export default {
       noRSS: 'Ресурс не содержит валидный RSS',
       network: 'Ошибка сети',
       unknown: 'Неизвестная ошибка. Что-то пошло не так',
-      isParsingError: 'Ресурс не содержит валидный RSS',
+      parsedError: 'Ресурс не содержит валидный RSS',
     },
     feeds: 'Фиды',
     posts: 'Посты',

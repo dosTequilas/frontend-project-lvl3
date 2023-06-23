@@ -84,11 +84,7 @@ const app = () => {
         watchedState.userEnteredLink.push(link);
         watchedState.loadingProcess = 'success';
         watchedState.form.status = 'valid';
-      })
-        .catch(() => {
-          watchedState.loadingProcess.error = 'network';
-          watchedState.loadingProcess.status = 'error';
-        });
+      });
     };
 
     elements.posts.addEventListener('click', (e) => {
@@ -96,7 +92,7 @@ const app = () => {
         watchedState.currentPostId = e.target.dataset.id;
         watchedState.openedPost.add(e.target.dataset.id);
       }
-      if (e.target.tagName === 'A') {
+      if (e.target.tagName === 'A') { // убрать таргет по букве
         watchedState.openedPost.add(e.target.dataset.id);
       }
     });
@@ -116,14 +112,14 @@ const app = () => {
 
         .catch((err) => {
           if (err.name === 'ValidationError') {
-            watchedState.form.status = 'failed';
             watchedState.form.error = err.type;
+            watchedState.form.status = 'failed';
           } else if (err.name === 'AxiosError') {
-            watchedState.loadingProcess.status = 'failed';
             watchedState.loadingProcess.error = 'network';
-          } else if (err.name === 'isParsingError') {
             watchedState.loadingProcess.status = 'failed';
+          } else if (err.name === 'isParsingError') {
             watchedState.loadingProcess.error = 'parsedError';
+            watchedState.loadingProcess.status = 'failed';
           }
         });
     });
