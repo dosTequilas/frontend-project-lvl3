@@ -112,6 +112,7 @@ const app = () => {
 
         .catch((err) => {
           if (err.name === 'ValidationError') {
+            console.log(err);
             watchedState.form.error = err.type;
             watchedState.form.status = 'failed';
           } else if (err.name === 'AxiosError') {
