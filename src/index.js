@@ -40,7 +40,6 @@ const app = () => {
         error: '',
       },
       feeds: [],
-      latestFeeds: [],
       currentPostId: '',
       openedPost: new Set(),
     };
@@ -52,11 +51,17 @@ const app = () => {
       feedback: document.querySelector('.feedback'),
       feeds: document.querySelector('.feeds'),
       posts: document.querySelector('.posts'),
+      postLink: document.getElementsByTagName('a'),
       modalTitle: document.querySelector('.modal-title'),
       modalBody: document.querySelector('.modal-body'),
       modalClose: document.querySelector('.modal-close'),
       modalMore: document.querySelector('.more-link'),
-      postLink: document.getElementsByTagName('a'),
+      pageName: document.getElementById('pageName'),
+      pageMoto: document.getElementById('pageMoto'),
+      pageInput: document.getElementById('pageInput'),
+      pageInputButton: document.getElementById('pageInputButton'),
+      pageExample: document.getElementById('pageExample'),
+      pageCreated: document.getElementById('pageCreated'),
     };
 
     const watchedState = watch(initialState, elements, i18);
@@ -92,7 +97,7 @@ const app = () => {
         watchedState.currentPostId = e.target.dataset.id;
         watchedState.openedPost.add(e.target.dataset.id);
       }
-      if (e.target.tagName === 'A') { // убрать таргет по букве
+      if (e.target.matches('a')) {
         watchedState.openedPost.add(e.target.dataset.id);
       }
     });
@@ -105,11 +110,7 @@ const app = () => {
       const links = watchedState.userEnteredLink;
 
       validateUrl(inputValue, links)
-        .then(() => makeRequest(inputValue)
-          .catch((error) => {
-            throw error;
-          }))
-
+        .then(() => makeRequest(inputValue))
         .catch((err) => {
           if (err.name === 'ValidationError') {
             console.log(err);
@@ -135,7 +136,6 @@ const app = () => {
           const newPosts = findNewValue(oldArr, newArr);
           feedsCopy[i].posts = [...oldArr, ...newPosts];
           if (newPosts) {
-            // eslint-disable-next-line no-param-reassign
             state.feeds = [...feedsCopy];
           }
         })
@@ -145,8 +145,6 @@ const app = () => {
           generatePromises(state);
         }, 5000);
       });
-
-      return promises;
     };
     generatePromises(watchedState);
   });

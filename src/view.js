@@ -15,12 +15,13 @@ const renderFeedback = (state, elements, i18n) => {
 const renderLoadingFeedback = (state, elements, i18n) => {
   if (state.loadingProcess.status === 'success') {
     elements.input.value = '';
+  } else {
+    const { feedback } = elements;
+    console.log(elements);
+    feedback.innerHTML = i18n(`errors.${state.loadingProcess.error}`);
+    feedback.classList.add('text-danger');
+    feedback.classList.remove('text-success');
   }
-  const { feedback } = elements;
-  console.log(elements);
-  feedback.innerHTML = i18n(`errors.${state.loadingProcess.error}`);
-  feedback.classList.add('text-danger');
-  feedback.classList.remove('text-success');
 };
 
 const modalPreparation = (state, elements, i18n) => {
@@ -30,7 +31,7 @@ const modalPreparation = (state, elements, i18n) => {
     modalClose,
     modalMore,
   } = elements;
-  const posts = state.feeds.reduce((acc, curr) => [...acc, ...curr.posts], []);
+  const posts = state.feeds.reduce((acc, currentFeed) => [...acc, ...currentFeed.posts], []);
   const currentPost = posts.find((post) => post.id === state.currentPostId);
 
   modalTitle.textContent = currentPost.title;
@@ -59,32 +60,34 @@ const renderFeeds = (state, elements, i18n) => {
   feedsElement.innerHTML = '';
   elements.feeds.appendChild(cardBorder);
 
-  const title = document.createElement('h3');
-  title.classList.add('h6');
-  title.classList.add('m-0');
-  title.textContent = state.feeds[0].title;
+  state.feeds.forEach((feed) => {
+    const title = document.createElement('h3');
+    title.classList.add('h6');
+    title.classList.add('m-0');
+    title.textContent = feed.title;
 
-  const description = document.createElement('p');
-  description.classList.add('m-0');
-  description.classList.add('small');
-  description.classList.add('text-black-50');
+    const description = document.createElement('p');
+    description.classList.add('m-0');
+    description.classList.add('small');
+    description.classList.add('text-black-50');
 
-  description.textContent = state.feeds[0].description;
+    description.textContent = feed.description;
 
-  const listItem = document.createElement('li');
-  listItem.classList.add('list-group-item');
-  listItem.classList.add('border-0');
-  listItem.classList.add('border-end-0');
+    const listItem = document.createElement('li');
+    listItem.classList.add('list-group-item');
+    listItem.classList.add('border-0');
+    listItem.classList.add('border-end-0');
 
-  const list = document.createElement('ul');
-  list.classList.add('list-group');
-  list.classList.add('border-0');
-  list.classList.add('rounded-0');
+    const list = document.createElement('ul');
+    list.classList.add('list-group');
+    list.classList.add('border-0');
+    list.classList.add('rounded-0');
 
-  listItem.appendChild(title);
-  listItem.appendChild(description);
-  list.appendChild(listItem);
-  cardBody.appendChild(list);
+    listItem.appendChild(title);
+    listItem.appendChild(description);
+    list.appendChild(listItem);
+    cardBody.appendChild(list);
+  });
 
   const postName = document.createElement('h2');
   postName.classList.add('card-title');
@@ -136,7 +139,7 @@ const renderFeeds = (state, elements, i18n) => {
       buttonListItem.dataset.id = post.id;
       buttonListItem.setAttribute('data-toggle', 'modal');
       buttonListItem.setAttribute('data-target', '#exampleModal');
-      buttonListItem.textContent = 'Просмотр';
+      buttonListItem.textContent = i18n('preview');
 
       itemBlock.appendChild(postLink);
       itemBlock.appendChild(buttonListItem);
@@ -147,6 +150,15 @@ const renderFeeds = (state, elements, i18n) => {
 
 const watch = (state, elements, i18n) => {
   const { button, input } = elements;
+
+  const initNewPageLocale = () => {
+    elements.pageName.textContent = i18n('pageName');
+    elements.pageMoto.textContent = i18n('pageMoto');
+    elements.pageInput.textContent = i18n('pageInput');
+    elements.pageInputButton.textContent = i18n('pageInputButton');
+    elements.pageExample.textContent = i18n('pageExample');
+    // elements.pageCreated.textContent = i18n('pageCreated');
+  };
 
   const watchedState = onChange(state, (path) => {
     switch (path) {
@@ -190,6 +202,7 @@ const watch = (state, elements, i18n) => {
     }
   });
 
+  initNewPageLocale(elements);
   return watchedState;
 };
 

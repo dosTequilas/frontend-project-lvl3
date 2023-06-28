@@ -17,5 +17,11 @@ export default {
     preview: 'Просмотр',
     close: 'Закрыть',
     more: 'Читать полностью',
+    pageName: 'RSS агрегатор',
+    pageMoto: 'Начните читать RSS сегодня! Это легко, это красиво.',
+    pageInput: 'Ссылка RSS',
+    pageInputButton: 'Добавить',
+    pageExample: 'Пример: https://ru.hexlet.io/lessons.rss',
+    pageCreated: 'created by',
   },
 };
