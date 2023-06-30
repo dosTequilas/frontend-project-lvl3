@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "[![Actions Status](https://github.com/dosTequilas/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/dosTequilas/frontend-project-lvl3/actions)",
+  "description": "RSS Agragation page",
   "main": "./src/index.js",
   "scripts": {
     "test": "npx -n --experimental-vm-modules jest",
