@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import * as yup from 'yup';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import watch from './view.js';
+import watch, { initNewPageLocale } from './view.js';
 import en from './lang/en.js';
 import ru from './lang/ru.js';
 import yupLocale from './lang/yup.js';
@@ -11,7 +11,7 @@ import parse from './parser.js';
 import findNewValue from './arrayDifferenceFinder.js';
 
 const getUrlWithProxy = (url) => {
-  const urlWithProxy = new URL('/get', 'https://allorigins.hexlet.app/get?url=https:%2F%2Fru.hexlet.io%2Flessons.rss');
+  const urlWithProxy = new URL('/get', 'https://allorigins.hexlet.app/');
   urlWithProxy.searchParams.set('url', url);
   urlWithProxy.searchParams.set('disableCache', 'true');
   return urlWithProxy.toString();
@@ -61,7 +61,8 @@ const app = () => {
       pageInput: document.getElementById('pageInput'),
       pageInputButton: document.getElementById('pageInputButton'),
       pageExample: document.getElementById('pageExample'),
-      pageCreated: document.getElementById('pageCreated'),
+      authorLink: document.getElementById('authorLink'),
+      linkHere: document.getElementById('linkHere'),
     };
 
     const watchedState = watch(initialState, elements, i18);
@@ -126,7 +127,7 @@ const app = () => {
         });
     });
 
-    const generatePromises = (state) => {
+    const updateFeeds = (state) => {
       const promises = state.feeds.map((feed, i) => axios.get(getUrlWithProxy(feed.link))
         .then((resp) => {
           const feedsCopy = JSON.parse(JSON.stringify(state.feeds));
@@ -140,13 +141,14 @@ const app = () => {
           }
         })
         .catch((error) => console.log(error)));
-      Promise.all(promises).then(() => {
+      Promise.all(promises).finally(() => {
         setTimeout(() => {
-          generatePromises(state);
+          updateFeeds(state);
         }, 5000);
       });
     };
-    generatePromises(watchedState);
+    updateFeeds(watchedState);
+    initNewPageLocale(elements, i18);
   });
 };
 

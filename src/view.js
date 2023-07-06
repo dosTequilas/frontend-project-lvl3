@@ -1,5 +1,15 @@
 import onChange from 'on-change';
 
+export const initNewPageLocale = (elements, i18n) => {
+  elements.pageName.textContent = i18n('pageName');
+  elements.pageMoto.textContent = i18n('pageMoto');
+  elements.pageInput.textContent = i18n('pageInput');
+  elements.pageInputButton.textContent = i18n('pageInputButton');
+  elements.pageExample.textContent = i18n('pageExample');
+  elements.linkHere.textContent = i18n('linkHere');
+  elements.authorLink.textContent = i18n('authorLink');
+};
+
 const renderFeedback = (state, elements, i18n) => {
   if (state.form.status === 'valid') {
     elements.feedback.innerHTML = i18n('loading.success');
@@ -151,15 +161,6 @@ const renderFeeds = (state, elements, i18n) => {
 const watch = (state, elements, i18n) => {
   const { button, input } = elements;
 
-  const initNewPageLocale = () => {
-    elements.pageName.textContent = i18n('pageName');
-    elements.pageMoto.textContent = i18n('pageMoto');
-    elements.pageInput.textContent = i18n('pageInput');
-    elements.pageInputButton.textContent = i18n('pageInputButton');
-    elements.pageExample.textContent = i18n('pageExample');
-    // elements.pageCreated.textContent = i18n('pageCreated');
-  };
-
   const watchedState = onChange(state, (path) => {
     switch (path) {
       case 'form.status': {
@@ -202,7 +203,6 @@ const watch = (state, elements, i18n) => {
     }
   });
 
-  initNewPageLocale(elements);
   return watchedState;
 };
 

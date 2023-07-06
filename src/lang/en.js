@@ -21,6 +21,7 @@ export default {
     pageInput: 'RSS Link',
     pageInputButton: 'Add',
     pageExample: 'Example: https://ru.hexlet.io/lessons.rss',
-    pageCreated: 'created by',
+    linkHere: 'created by',
+    authorLink: 'dosTequilas',
   },
 };
