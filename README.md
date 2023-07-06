@@ -6,7 +6,7 @@
 
 <h1 align="center">
   <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Feed-icon.svg/256px-Feed-icon.svg.png" width="224px"/><br/>
-  Brain Games
+  RSS Reader
 </h1>
 
 <p align="center">The <b>RSS Reader</b> is a web application that allows users to stay updated with the latest news and updates from their favorite websites and blogs. It provides a convenient way to aggregate and organize RSS feeds, providing users with a centralized platform to access and read their chosen content. With the RSS Reader, users can easily subscribe to RSS feeds, browse through articles, and stay informed about the topics that interest them.
