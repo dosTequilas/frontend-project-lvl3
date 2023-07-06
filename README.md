@@ -15,10 +15,10 @@
 ## ⚡️ Quick Start
 To quickly get started with the RSS Reader, follow these steps:
 1. Open the provided link.
-2. Enter the desired RSS link, such as ```https://news.un.org/feed/subscribe/ru/tags/un/feed/rss.xml```
+2. Enter the desired RSS link, such as ```https://news.un.org/feed/subscribe/en/tags/un/feed/rss.xml```
 3. You can enter as many links as you need to subscribe to multiple RSS feeds.
 
 
 
 ## ⭐️ Project Assistance
-If you would like to express your gratitude or support the ongoing development of the RSS Reader, simply add a GitHub Star to the project. Together, we can continually improve this project each day! 
+If you would like to express your gratitude or support the ongoing development of the RSS Reader, simply add a ```GitHub Star``` to the project. Together, we can continually improve this project each day! 
