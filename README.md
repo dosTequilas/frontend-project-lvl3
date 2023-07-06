@@ -21,4 +21,5 @@ To quickly get started with the RSS Reader, follow these steps:
 
 
 ## ⭐️ Project Assistance
-If you would like to express your gratitude or support the ongoing development of the RSS Reader, simply add a ```GitHub Star``` to the project. Together, we can continually improve this project each day! 
+If you would like to express your gratitude or support the ongoing development of the RSS Reader, simply add a ```GitHub Star``` to the project. 
+With our collective efforts, we have the power to make ongoing enhancements to this project every single day! Together, we can strive for constant improvement and make this project even better over time!
