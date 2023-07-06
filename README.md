@@ -11,19 +11,14 @@
 
 <p align="center">The <b>RSS Reader</b> is a web application that allows users to stay updated with the latest news and updates from their favorite websites and blogs. It provides a convenient way to aggregate and organize RSS feeds, providing users with a centralized platform to access and read their chosen content. With the RSS Reader, users can easily subscribe to RSS feeds, browse through articles, and stay informed about the topics that interest them.
 
-## ⚡️ Quick start
 
-First of all, open the [link](https://frontend-project-lvl3-three-phi.vercel.app/).
+## ⚡️ Quick Start
+To quickly get started with the RSS Reader, follow these steps:
+1. Open the provided link.
+2. Enter the desired RSS link, such as ```https://news.un.org/feed/subscribe/ru/tags/un/feed/rss.xml```
+3. You can enter as many links as you need to subscribe to multiple RSS feeds.
 
 
-Then enter your desired RSS link.
 
-```Example: https://news.un.org/feed/subscribe/ru/tags/un/feed/rss.xml```
-
-You can enter as many links as you need.
-
-## ⭐️ Project assistance
-
-If you want to say **thank you** or/and support active development of `RSS reader`, fust add a [GitHub Star](https://github.com/dosTequilas/frontend-project-lvl3) to the project.
-
-Together, we can make this project **better** every day! 😘
+## ⭐️ Project Assistance
+If you would like to express your gratitude or support the ongoing development of the RSS Reader, simply add a GitHub Star to the project. Together, we can continually improve this project each day! 
