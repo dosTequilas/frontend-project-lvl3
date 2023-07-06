@@ -14,7 +14,7 @@
 
 ## ⚡️ Quick Start
 To quickly get started with the RSS Reader, follow these steps:
-1. Open the provided link.
+1. Open the provided [link](https://frontend-project-lvl3-three-phi.vercel.app/).
 2. Enter the desired RSS link, such as ```https://news.un.org/feed/subscribe/en/tags/un/feed/rss.xml```
 3. You can enter as many links as you need to subscribe to multiple RSS feeds.
 
